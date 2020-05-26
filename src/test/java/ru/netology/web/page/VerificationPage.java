@@ -1,21 +1,25 @@
 package ru.netology.web.page;
 
+import com.codeborne.selenide.SelenideElement;
 import ru.netology.web.data.DataHelper;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class VerificationPage {
+    public SelenideElement verification = $("[data-test-id=code] input");
+    public SelenideElement codeInput = $("[data-test-id=code] input");
+    public SelenideElement buttonVerify = $("[data-test-id=action-verify]");
 
-  public VerificationPage(){
-      $("[data-test-id=code] input").shouldBe(visible);
-  }
+    public VerificationPage() {
+        verification.shouldBe(visible);
+    }
 
-  public DahsboardPage validVerify(DataHelper.VerificationCode verificationCode){
-      $("[data-test-id=code] input").setValue(verificationCode.getCodeForVerification());
-      $("[data-test-id=action-verify]").click();
-      return new DahsboardPage();
-  }
+    public DahsboardPage validVerify(DataHelper.VerificationCode verificationCode) {
+        codeInput.setValue(verificationCode.getCodeForVerification());
+        buttonVerify.click();
+        return new DahsboardPage();
+    }
 }
 
 

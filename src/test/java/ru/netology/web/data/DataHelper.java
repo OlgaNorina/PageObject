@@ -36,11 +36,11 @@ public class DataHelper {
         public String numberOfCard;
     }
 
-    public static CardsInfo getfirstCardInfo(){
+    public static CardsInfo getFirstCardInfo(){
         return new CardsInfo("5559 0000 0000 0001");
     }
 
-    public static CardsInfo getsecondCardInfo(){
+    public static CardsInfo getSecondCardInfo(){
         return new CardsInfo("5559 0000 0000 0002");
     }
 }
