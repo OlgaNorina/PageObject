@@ -1,58 +1,124 @@
 package ru.netology.web.test;
 
 import lombok.val;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import ru.netology.web.data.DataHelper;
 import ru.netology.web.page.LoginPage;
 import ru.netology.web.page.DahsboardPage;
+import ru.netology.web.page.TransferPage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MoneyTransferTest {
 
-    /*@BeforeEach
-    void shouldVerification() {
+    @BeforeEach
+    void shouldVerify() {
         val loginPage = new LoginPage();
         loginPage.openPage();
         val authInfo = DataHelper.getAuthInfoValid();
         val verificationPage = loginPage.validLogin(authInfo);
         val verificationCode = DataHelper.getVerificationCode();
         verificationPage.validVerify(verificationCode);
-        System.out.println(DahsboardPage.getBalanceOfFirstCard());
-        System.out.println(DahsboardPage.getBalanceOfSecondCard());
-    }*/
+    }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/dataFromSecondToFirst.csv")
-    void shouldTransferMoneyFromSecondToFirst(int transfer, int balanceOfFirstCard, int balanceOfSecondCard) {
-        val loginPage = new LoginPage();
-        loginPage.openPage();
-        val authInfo = DataHelper.getAuthInfoValid();
-        val verificationPage = loginPage.validLogin(authInfo);
-        val verificationCode = DataHelper.getVerificationCode();
-        verificationPage.validVerify(verificationCode);
-        val dahsboardPage = new DahsboardPage();
-        val transferToFirst = dahsboardPage.transferToFirstCard();
-        //System.out.println($(".list"));
-        //System.out.println("Баланс карты 0001: " + DahsboardPage.getBalanceOfFirstCard());
-        //System.out.println(DahsboardPage.getBalanceOfSecondCard());
+    @CsvFileSource(resources = "/data.csv")
+    void shouldTransferMoneyFromSecondToFirst(int transfer) {
+
+        DahsboardPage page = new DahsboardPage();
+        int startBalanceOfFirstCard = page.getBalanceOfFirstCard();
+        int startBalanceOfSecondCard = page.getBalanceOfSecondCard();
+        System.out.println("Баланс карты 0001 до транзакции: " + startBalanceOfFirstCard);
+        System.out.println("Баланс карты 0002 до транзакции: " + startBalanceOfSecondCard);
+
+        val transferPage = new TransferPage();
         val transferFrom2To1Card = DataHelper.getSecondCardInfo();
-        transferToFirst.transferInfo(transferFrom2To1Card, transfer);
-        assertEquals(balanceOfFirstCard, DahsboardPage.getBalanceOfFirstCard());
-        assertEquals(balanceOfSecondCard, DahsboardPage.getBalanceOfSecondCard());
+        transferPage.transferFromSecondToFirst(transferFrom2To1Card, transfer);
+        val balanceFirstCard = startBalanceOfFirstCard + transfer;
+        val balanceSecondCard = startBalanceOfSecondCard - transfer;
+        val currentBalanceOfFirstCard = page.getCurrentBalanceOfFirstCard();
+        val currentBalanceOfSecondCard = page.getCurrentBalanceOfSecondCard();
+
+        assertEquals(balanceFirstCard, currentBalanceOfFirstCard);
+        assertEquals(balanceSecondCard, currentBalanceOfSecondCard);
+
+        System.out.println("Баланс карты 0001 после транзакции: " + currentBalanceOfFirstCard);
+        System.out.println("Баланс карты 0002 после транзакции: " + currentBalanceOfSecondCard);
     }
 
-    /*@Test
+    @ParameterizedTest
+    @CsvFileSource(resources = "/data.csv")
     void shouldTransferMoneyFromFirstToSecond(int transfer) {
+
+        DahsboardPage page = new DahsboardPage();
+        int startBalanceOfFirstCard = page.getBalanceOfFirstCard();
+        int startBalanceOfSecondCard = page.getBalanceOfSecondCard();
+        System.out.println("Баланс карты 0001 до транзакции: " + startBalanceOfFirstCard);
+        System.out.println("Баланс карты 0002 до транзакции: " + startBalanceOfSecondCard);
+
         val transferPage = new TransferPage();
         val transferFrom1To2Card = DataHelper.getFirstCardInfo();
-        transferPage.transferInfo(transferFrom1To2Card, 11000);
-        assertEquals(0, DahsboardPage.getBalanceOfFirstCard());
-        assertEquals(20000, DahsboardPage.getBalanceOfSecondCard());
+        transferPage.transferFromFirstToSecond(transferFrom1To2Card, transfer);
+        val balanceFirstCardAfterTrans = startBalanceOfFirstCard - transfer;
+        val balanceSecondCardAfterTrans = startBalanceOfSecondCard + transfer;
+        val currentBalanceOfFirstCard = page.getCurrentBalanceOfFirstCard();
+        val currentBalanceOfSecondCard = page.getCurrentBalanceOfSecondCard();
+
+        assertEquals(balanceFirstCardAfterTrans, currentBalanceOfFirstCard);
+        assertEquals(balanceSecondCardAfterTrans, currentBalanceOfSecondCard);
+
+        System.out.println("Баланс карты 0001 после транзакции: " + currentBalanceOfFirstCard);
+        System.out.println("Баланс карты 0002 после транзакции: " + currentBalanceOfSecondCard);
     }
 
-    //-1000, 1, 1,9, 0, больше, чем есть
+    @Test
+    void shouldTransferMoneyFromFirstToSecondMinus() {
+
+        DahsboardPage page = new DahsboardPage();
+        int startBalanceOfFirstCard = page.getBalanceOfFirstCard();
+        int startBalanceOfSecondCard = page.getBalanceOfSecondCard();
+
+        val transferPage = new TransferPage();
+        val transferFrom1To2Card = DataHelper.getFirstCardInfo();
+        int transfer = -1000;
+        transferPage.transferFromFirstToSecond(transferFrom1To2Card, transfer);
+        val balanceFirstCardAfterTrans = startBalanceOfFirstCard + transfer;
+        val balanceSecondCardAfterTrans = startBalanceOfSecondCard - transfer;
+        val currentBalanceOfFirstCard = page.getCurrentBalanceOfFirstCard();
+        val currentBalanceOfSecondCard = page.getCurrentBalanceOfSecondCard();
+
+        assertEquals(balanceFirstCardAfterTrans, currentBalanceOfFirstCard);
+        assertEquals(balanceSecondCardAfterTrans, currentBalanceOfSecondCard);
+    }
+
+    @Test
+    void shouldTransferMoneyFromFirstToSecondMoreThanExist() {
+
+        DahsboardPage page = new DahsboardPage();
+        int startBalanceOfFirstCard = page.getBalanceOfFirstCard();
+        int startBalanceOfSecondCard = page.getBalanceOfSecondCard();
+
+        System.out.println("Баланс карты 0001 до транзакции: " + startBalanceOfFirstCard);
+        System.out.println("Баланс карты 0002 до транзакции: " + startBalanceOfSecondCard);
+
+        val transferPage = new TransferPage();
+        val transferFrom1To2Card = DataHelper.getFirstCardInfo();
+        int transfer = 20000;
+        transferPage.transferFromFirstToSecond(transferFrom1To2Card, transfer);
+        val balanceFirstCardAfterTrans = startBalanceOfFirstCard - transfer;
+        val balanceSecondCardAfterTrans = startBalanceOfSecondCard + transfer;
+        val currentBalanceOfFirstCard = page.getCurrentBalanceOfFirstCard();
+        val currentBalanceOfSecondCard = page.getCurrentBalanceOfSecondCard();
+
+        assertEquals(balanceFirstCardAfterTrans, currentBalanceOfFirstCard);
+        assertEquals(balanceSecondCardAfterTrans, currentBalanceOfSecondCard);
+
+        System.out.println("Баланс карты 0001 после транзакции: " + currentBalanceOfFirstCard);
+        System.out.println("Баланс карты 0002 после транзакции: " + currentBalanceOfSecondCard);
+    }
 
     @Test
     void shouldInvalidVerification() {
@@ -60,5 +126,5 @@ public class MoneyTransferTest {
         loginPage.openPage();
         val authInfo = DataHelper.getAuthInfoInvalid();
         loginPage.invalidLogin(authInfo);
-    }*/
+    }
 }

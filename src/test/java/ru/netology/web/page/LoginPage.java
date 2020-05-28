@@ -27,7 +27,6 @@ public class LoginPage {
         errorNotification.shouldBe(visible);
     }
 
-
     public void openPage() {
         open("http://localhost:9999");
     }
