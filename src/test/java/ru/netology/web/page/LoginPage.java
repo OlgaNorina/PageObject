@@ -5,7 +5,6 @@ import ru.netology.web.data.DataHelper;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
 
 public class LoginPage {
     public SelenideElement loginInput = $("[data-test-id=login] input");
@@ -25,9 +24,5 @@ public class LoginPage {
         passwordInput.setValue(info.getPassword());
         buttonActionLogin.click();
         errorNotification.shouldBe(visible);
-    }
-
-    public void openPage() {
-        open("http://localhost:9999");
     }
 }

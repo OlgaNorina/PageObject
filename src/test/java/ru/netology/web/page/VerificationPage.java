@@ -15,10 +15,9 @@ public class VerificationPage {
         verification.shouldBe(visible);
     }
 
-    public DahsboardPage validVerify(DataHelper.VerificationCode verificationCode) {
+    public void validVerify(DataHelper.VerificationCode verificationCode) {
         codeInput.setValue(verificationCode.getCodeForVerification());
         buttonVerify.click();
-        return new DahsboardPage();
     }
 }
 

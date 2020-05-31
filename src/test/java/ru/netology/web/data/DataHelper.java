@@ -2,6 +2,7 @@ package ru.netology.web.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import lombok.val;
 
 public class DataHelper {
     private DataHelper() {
@@ -43,4 +44,16 @@ public class DataHelper {
     public static CardsInfo getSecondCardInfo(){
         return new CardsInfo("5559 0000 0000 0002");
     }
+
+    public static int getBalanceCardPlus(int balance, int transfer) {
+        int balanceFirstCard = balance + transfer;
+        return balanceFirstCard;
+    }
+
+    public static int getBalanceCardMinus (int balance, int transfer) {
+        int balanceFirstCard = balance - transfer;
+        return balanceFirstCard;
+    }
+
+
 }
