@@ -23,25 +23,25 @@ public class DataHelper {
     }
 
     @Value
-    public static class VerificationCode{
+    public static class VerificationCode {
         private String codeForVerification;
     }
 
-    public static VerificationCode getVerificationCode(){
+    public static VerificationCode getVerificationCode() {
         return new VerificationCode("12345");
     }
 
     @Value
     @AllArgsConstructor
-    public static class CardsInfo{
+    public static class CardsInfo {
         public String numberOfCard;
     }
 
-    public static CardsInfo getFirstCardInfo(){
+    public static CardsInfo getFirstCardInfo() {
         return new CardsInfo("5559 0000 0000 0001");
     }
 
-    public static CardsInfo getSecondCardInfo(){
+    public static CardsInfo getSecondCardInfo() {
         return new CardsInfo("5559 0000 0000 0002");
     }
 
@@ -50,9 +50,9 @@ public class DataHelper {
         return cardBalancePlus;
     }
 
-    public static int getBalanceCardMinus (int balance, int transfer) {
+    public static int getBalanceCardMinus(int balance, int transfer) {
         int cardBalanceMinus = balance - transfer;
-        if (cardBalanceMinus<0){
+        if (cardBalanceMinus < 0) {
             return balance;
         }
         return cardBalanceMinus;
