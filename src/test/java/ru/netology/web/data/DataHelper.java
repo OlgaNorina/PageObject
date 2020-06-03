@@ -46,13 +46,16 @@ public class DataHelper {
     }
 
     public static int getBalanceCardPlus(int balance, int transfer) {
-        int balanceFirstCard = balance + transfer;
-        return balanceFirstCard;
+        int cardBalancePlus = balance + transfer;
+        return cardBalancePlus;
     }
 
     public static int getBalanceCardMinus (int balance, int transfer) {
-        int balanceFirstCard = balance - transfer;
-        return balanceFirstCard;
+        int cardBalanceMinus = balance - transfer;
+        if (cardBalanceMinus<0){
+            return balance;
+        }
+        return cardBalanceMinus;
     }
 
 
